@@ -26,6 +26,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
       - name: Build with Gradle
         run: ./gradlew build
       - name: Copy JAR 파일
@@ -33,4 +35,5 @@ jobs:
       - name: Start SSH Agent
         run: |
           eval `ssh-agent -s`
+          echo $SERVER_SSH_PRIVATE_KEY
           ssh-add <(echo "$SERVER_SSH_PRIVATE_KEY")
