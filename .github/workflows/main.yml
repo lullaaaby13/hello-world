@@ -26,8 +26,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: ./gradlew build
       - name: Copy JAR 파일
@@ -41,7 +48,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.SERVER_IP }}
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           TARGET: "/app"
-          EXCLUDE: "/dist/, /node_modules/"
           SCRIPT_AFTER: |
             nohup java -jar hello-world-0.0.1-SNAPSHOT.jar &
             
