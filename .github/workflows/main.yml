@@ -42,12 +42,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           TARGET: "/app"
           EXCLUDE: "/dist/, /node_modules/"
-          SCRIPT_BEFORE: |
-            whoami
-            ls -al
           SCRIPT_AFTER: |
-            whoami
-            ls -al
             nohup java -jar hello-world-0.0.1-SNAPSHOT.jar &
             
 
