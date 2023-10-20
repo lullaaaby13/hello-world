@@ -32,11 +32,29 @@ jobs:
         run: ./gradlew build
       - name: Copy JAR 파일
         run: cp build/libs/hello-world-0.0.1-SNAPSHOT.jar ${{ runner.workspace }}/app.jar
-      - name: Start SSH Agent
-        run: |
-          eval `ssh-agent -s`
-          ssh-add <(echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}")
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} > ~/.ssh/known_hosts
-      - name: Deploy to Virtual Machine
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ runner.workspace }}/id_rsa root@101.101.211.188 "killall -9 java; nohup java -jar ~/app.jar &"
+      - name: Deploy to Staging server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i"
+          SOURCE: "build/libs/"
+          REMOTE_HOST: ${{ secrets.SERVER_IP }}
+          REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
+          TARGET: "/app"
+          EXCLUDE: "/dist/, /node_modules/"
+          SCRIPT_BEFORE: |
+            whoami
+            ls -al
+          SCRIPT_AFTER: |
+            whoami
+            ls -al
+            
+
+#      - name: Start SSH Agent
+#        run: |
+#          eval `ssh-agent -s`
+#          ssh-add <(echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}")
+#          ssh-keyscan -H ${{ secrets.SERVER_IP }} > ~/.ssh/known_hosts
+#      - name: Deploy to Virtual Machine
+#        run: |
+#          ssh -o StrictHostKeyChecking=no -i ${{ runner.workspace }}/id_rsa root@101.101.211.188 "killall -9 java; nohup java -jar ~/app.jar &"
