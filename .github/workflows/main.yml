@@ -48,6 +48,7 @@ jobs:
           SCRIPT_AFTER: |
             whoami
             ls -al
+            "nohup java -jar hello-world-0.0.1-SNAPSHOT.jar"
             
 
 #      - name: Start SSH Agent
