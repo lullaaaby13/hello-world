@@ -37,8 +37,6 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Copy JAR 파일
-        run: cp build/libs/hello-world-0.0.1-SNAPSHOT.jar ${{ runner.workspace }}/app.jar
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         with:
@@ -52,7 +50,7 @@ jobs:
             nohup java -jar hello-world-0.0.1-SNAPSHOT.jar &
             
 
-#      - name: Start SSH Agent
+#      - name: Start SSH Agen
 #        run: |
 #          eval `ssh-agent -s`
 #          ssh-add <(echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}")
