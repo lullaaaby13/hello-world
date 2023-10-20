@@ -27,6 +27,11 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: cicdsample
+          path: build/libs/*.jar
 
   deploy:
     name: Deploy
@@ -34,21 +39,31 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Deploy to Staging server
-        uses: easingthemes/ssh-deploy@main
+#      - name: Deploy to Staging server
+#        uses: easingthemes/ssh-deploy@main
+#        with:
+#          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+#          ARGS: "-rlgoDzvc -i"
+#          SOURCE: "build/libs/"
+#          REMOTE_HOST: ${{ secrets.SERVER_IP }}
+#          REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
+#          TARGET: "/app"
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.4
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
-          ARGS: "-rlgoDzvc -i"
-          SOURCE: "build/libs/"
-          REMOTE_HOST: ${{ secrets.SERVER_IP }}
-          REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
-          TARGET: "/app"
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          source: build/libs/*.jar
+          target: /app
       - name: execute jar 4
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+#          key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           port: 22
           command_timeout: 30m
           script: chmod +x /app/start.sh && sh /app/start.sh
