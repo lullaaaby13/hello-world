@@ -54,7 +54,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           port: 22
           command_timeout: 30m
-          script: |
-            sh /app/start.sh
-          
+          script: chomod +x /app/start.sh && sh /app/start.sh
+
 
