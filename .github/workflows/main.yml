@@ -47,7 +47,7 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           TARGET: "/app"
           SCRIPT_AFTER: |
-            sh start.sh
+            sh /app/start.sh
             
 
 #      - name: Start SSH Agen
