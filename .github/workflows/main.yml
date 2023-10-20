@@ -46,7 +46,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.SERVER_IP }}
           REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
           TARGET: "/app"
-      - name: execute jar
+      - name: execute jar 2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -56,4 +56,5 @@ jobs:
           command_timeout: 30m
           script: |
             sh /app/start.sh
+          
 
