@@ -37,9 +37,9 @@ jobs:
           eval `ssh-agent -s`
           ssh-add <(echo "$SERVER_SSH_PRIVATE_KEY")
         env:
-          $SERVER_SSH_PRIVATE_KEY: ${{ secrets.$SERVER_SSH_PRIVATE_KEY }}
+          SERVER_SSH_PRIVATE_KEY: ${{ secrets.$SERVER_SSH_PRIVATE_KEY }}
       - name: Deploy to Virtual Machine
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ runner.workspace }}/id_rsa root@101.101.211.188 "killall -9 java; nohup java -jar ~/app.jar &"
         env:
-          $SERVER_SSH_PRIVATE_KEY: ${{ secrets.$SERVER_SSH_PRIVATE_KEY }}
+          SERVER_SSH_PRIVATE_KEY: ${{ secrets.$SERVER_SSH_PRIVATE_KEY }}
