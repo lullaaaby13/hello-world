@@ -35,6 +35,7 @@ jobs:
       - name: Start SSH Agent
         run: |
           eval `ssh-agent -s`
+          echo "$SERVER_SSH_PRIVATE_KEY"
           ssh-add <(echo "$SERVER_SSH_PRIVATE_KEY")
         env:
           SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
