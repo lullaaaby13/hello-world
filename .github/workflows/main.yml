@@ -48,6 +48,10 @@ jobs:
 #          REMOTE_HOST: ${{ secrets.SERVER_IP }}
 #          REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
 #          TARGET: "/app"
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: cicdsample
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.4
         with:
