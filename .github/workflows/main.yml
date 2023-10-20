@@ -35,7 +35,7 @@ jobs:
       - name: Start SSH Agent
         run: |
           eval `ssh-agent -s`
-          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-add <(echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}")
           ssh-keyscan -H ${{ secrets.SERVER_IP }} > ~/.ssh/known_hosts
       - name: Deploy to Virtual Machine
         run: |
